@@ -9,6 +9,9 @@ class TimesNode:
     def inorder(self):
         return "(" + self.left.inorder() + " * " + self.right.inorder() + ")"
 
+    def postorder(self):
+        return self.left.postorder() + " " + self.right.postorder() + " *"
+
 
 class PlusNode:
     def __init__(self, left, right):
@@ -21,6 +24,9 @@ class PlusNode:
     def inorder(self):
         return "(" + self.left.inorder() + " + " + self.right.inorder() + ")"
 
+    def postorder(self):
+        return self.left.postorder() + " " + self.right.postorder() + " +"
+
 
 class NumNode:
     def __init__(self, num):
@@ -32,13 +38,19 @@ class NumNode:
     def inorder(self):
         return str(self.num)
 
+    def postorder(self):
+        return str(self.num)
+
 
 def main():
-    x = NumNode(5)
-    y = NumNode(4)
-    p = PlusNode(x, y)
-    t = TimesNode(p, NumNode(6))
-    root = PlusNode(t, NumNode(3))
+    a = NumNode(5)
+    b = NumNode(4)
+    c = NumNode(3)
+    d = NumNode(2)
+    t1 = TimesNode(a, b)
+    t2 = TimesNode(c, d)
+    root = PlusNode(t1, t2)
+    print(root.postorder())
     print(root.eval())
 
 
