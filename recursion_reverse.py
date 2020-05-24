@@ -13,11 +13,11 @@ def reverse_list(l):
     return accumulator
 
 
-def reverse_list_recur(l):
-    if l == []:
+def reverse_list_recur(lst):
+    if lst == []:
         return []
-    tail = reverse_list_recur(l[1:])
-    head = l[:1]
+    tail = reverse_list_recur(lst[1:])
+    head = lst[:1]
     return tail + head
 
 
