@@ -14,7 +14,7 @@ class Board:
                     row.append(Dummy())
                 else:
                     row.append(board[i][j])
-           self.items.append(row)
+            self.items.append(row)
 
     def __getitem__(self, index):
         """Return a row of the board."""
