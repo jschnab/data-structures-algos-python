@@ -65,8 +65,49 @@ def merge_sort(seq):
     merge_sort_recursive(seq, 0, len(seq))
 
 
+def partition(seq, start, stop):
+    # pivot_index comes from the start location in the list
+    pivot_index = start
+    pivot = seq[pivot_index]
+    i = start + 1
+    j = stop - 1
+
+    while i <= j:
+        while i <= j and seq[i] <= pivot:
+            i += 1
+        while i <= j and seq[j] > pivot:
+            j -= 1
+        if i < j:
+            tmp = seq[i]
+            seq[i] = seq[j]
+            seq[j] = tmp
+            i += 1
+            j -= 1
+    seq[pivot_index] = seq[j]
+    seq[j] = pivot
+    return j
+
+
+def quicksort_recursive(seq, start, stop):
+    if start >= stop - 1:
+        return
+    # pivot index ends up between the two halves
+    # where the pivot value is in its final location
+    pivot_index = partition(seq, start, stop)
+    quicksort_recursive(seq, start, pivot_index)
+    quicksort_recursive(seq, pivot_index + 1, stop)
+
+
+def quicksort(seq):
+    # randomize sequence to find a good pivot
+    for i in range(len(seq)):
+        j = random.randint(0, len(seq) - 1)
+        seq[i], seq[j] = seq[j], seq[i]
+    quicksort_recursive(seq, 0, len(seq))
+
+
 if __name__ == "__main__":
     seq = [random.randint(0, 100) for _ in range(10)]
     print("Before sort:", seq)
-    merge_sort(seq)
+    quicksort(seq)
     print("After sort:", seq)
