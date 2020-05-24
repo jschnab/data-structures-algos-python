@@ -99,3 +99,36 @@ class LinkedList:
             self.num_items += 1
         else:
             self.append(item)
+
+    def __delitem__(self, index):
+        if index >= 0 and index < self.num_items:
+            cursor = self.first
+            for i in range(index):
+                cursor = cursor.get_next()
+            cursor.set_next(cursor.get_next().get_next())
+            self.num_items -= 1
+            return
+        raise IndexError("LinkedList index out of range")
+
+    def __iter__(self):
+        cursor = self.first.get_next()
+        for _ in range(self.num_items):
+            yield cursor.get_item()
+            cursor = cursor.get_next()
+
+    def __eq__(self, other):
+        if type(self) != type(other):
+            return False
+        if self.num_items != other.num_items:
+            return False
+        cur_self = self.first.get_next()
+        cur_other = other.first.get_next()
+        for _ in range(self.num_items):
+            if cur_self.get_item() != cur_other.get_item():
+                return False
+            cur_self = cur_self.get_next()
+            cur_other = cur_other.get_next()
+        return True
+
+    def __len__(self):
+        return self.num_items
