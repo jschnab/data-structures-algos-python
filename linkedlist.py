@@ -106,6 +106,8 @@ class LinkedList:
             for i in range(index):
                 cursor = cursor.get_next()
             cursor.set_next(cursor.get_next().get_next())
+            if index == self.num_items - 1:
+                self.last = cursor
             self.num_items -= 1
             return
         raise IndexError("LinkedList index out of range")
