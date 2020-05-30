@@ -13,6 +13,32 @@ PRECEDENCE = {
 }
 
 NUMBERS = "0123456789"
+OPERATORS = "*/+-"
+PARENTHESES = "()"
+SPACE = " "
+SYMBOLS = OPERATORS + PARENTHESES + SPACE
+
+
+def tokenize(string):
+    tokens = []
+    i, j = 0, 0
+    reading_number = False
+    for s in string:
+        if s in NUMBERS:
+            reading_number = True
+            j += 1
+        if s in SYMBOLS:
+            if reading_number:
+                tokens.append(string[i:j])
+                i = j
+                reading_number = False
+            if s != SPACE:
+                tokens.append(s)
+            i += 1
+            j += 1
+    if i != j:
+        tokens.append(string[i:j])
+    return tokens
 
 
 def calculate(operator, operand1, operand2):
@@ -43,8 +69,8 @@ def eval_infix(expression):
     operators.push("(")
     operands = Stack()
 
-    for token in expression.split(" "):
-        if re.match(r"^\d$", token):
+    for token in tokenize(expression):
+        if re.match(r"^\d+$", token):
             operands.push(token)
         else:
             operate(token, operators, operands)
@@ -58,7 +84,7 @@ def operate(token, operators, operands):
         return
     while PRECEDENCE[token] <= PRECEDENCE[operators.top()]:
         top_op = operators.pop()
-        if top_op in "+-*/":
+        if top_op in OPERATORS:
             operands.push(calculate(top_op, operands.pop(), operands.pop()))
         elif top_op == "(":
             if token == ")":
@@ -70,4 +96,4 @@ def operate(token, operators, operands):
 
 
 if __name__ == "__main__":
-    print(eval_infix("( 6 + 5 ) * 4 - ( 9 + 1 )"))
+    print(eval_infix("(43 * 4) - (3 * 10)"))
