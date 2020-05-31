@@ -72,8 +72,8 @@ class HashSet:
                 self.items = HashSet.__rehash(
                     self.items, [None] * int(len(self.items) / 2)
                 )
-            else:
-                raise KeyError("Item not in HashSet")
+        else:
+            raise KeyError("Item not in HashSet")
 
     def __contains__(self, item):
         idx = hash(item) % len(self.items)
@@ -88,3 +88,49 @@ class HashSet:
             if self.items[i] is not None \
                     and type(self.items[i]) != HashSet.__Placeholder:
                 yield self.items[i]
+
+    def __len__(self):
+        return self.num_items
+
+    def is_disjoint(self, other):
+        if (len(self) == 0) or (len(other) == 0):
+            return True
+        if len(self) < len(other):
+            self, other = other, self
+        for i in other:
+            if i in self:
+                return False
+        return True
+
+    def is_subset(self, other):
+        return all(i in other for i in self)
+
+    def is_superset(self, other):
+        return other.is_subset(self)
+
+    def union(self, other):
+        result = HashSet()
+        for i in self:
+            result.add(i)
+        for i in other:
+            result.add(i)
+        return result
+
+    def intersection(self, other):
+        result = HashSet()
+        if len(self) < len(other):
+            self, other = other, self
+        for i in self:
+            if i in other:
+                result.add(i)
+        return result
+
+    def difference(self, other):
+        result = HashSet()
+        for i in self:
+            if i not in other:
+                result.add(i)
+        return result
+
+    def symmetric_difference(self, other):
+        return self.difference(other).union(other.difference(self))
