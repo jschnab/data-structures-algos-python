@@ -75,6 +75,15 @@ class HashSet:
         else:
             raise KeyError("Item not in HashSet")
 
+    def discard(self, item):
+        if HashSet.__remove(item, self.items):
+            self.num_items -= 1
+            load = max(self.num_items, 10) / len(self.items)
+            if load <= 0.25:
+                self.items = HashSet.__rehash(
+                    self.items, [None] * int(len(self.items) / 2)
+                )
+
     def __contains__(self, item):
         idx = hash(item) % len(self.items)
         while self.items[idx] is not None:
@@ -91,6 +100,13 @@ class HashSet:
 
     def __len__(self):
         return self.num_items
+
+    def __getitem__(self, item):
+        idx = hash(item) % len(self.items)
+        while self.items[idx] is not None:
+            if self.items[idx] == item:
+                return self.items[idx]
+            idx = (idx + 1) % len(self.items)
 
     def is_disjoint(self, other):
         if (len(self) == 0) or (len(other) == 0):
@@ -125,11 +141,13 @@ class HashSet:
                 result.add(i)
         return result
 
+    def difference_update(self, other):
+        for i in other:
+            self.discard(i)
+
     def difference(self, other):
-        result = HashSet()
-        for i in self:
-            if i not in other:
-                result.add(i)
+        result = HashSet(self)
+        result.difference_update(other)
         return result
 
     def symmetric_difference(self, other):
