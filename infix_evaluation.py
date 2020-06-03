@@ -27,7 +27,7 @@ def tokenize(string):
         if s in NUMBERS:
             reading_number = True
             j += 1
-        if s in SYMBOLS:
+        elif s in SYMBOLS:
             if reading_number:
                 tokens.append(string[i:j])
                 i = j
