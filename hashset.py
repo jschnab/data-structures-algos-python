@@ -152,3 +152,18 @@ class HashSet:
 
     def symmetric_difference(self, other):
         return self.difference(other).union(other.difference(self))
+
+    def copy(self):
+        other = HashSet()
+        for i in self:
+            other.add(i)
+        return other
+
+    def __str__(self):
+        s = "{"
+        s += ", ".join(repr(i) for i in self)
+        s += "}"
+        return s
+
+    def __repr__(self):
+        return str(self)
