@@ -86,27 +86,31 @@ class BinarySearchTree:
             if root is None:
                 return
 
+            # node has no children
             if root.get_val() == val and not root.get_left() \
                     and not root.get_right():
                 return
 
+            # node has a left child
             if root.get_val() == val and root.get_left() \
                     and not root.get_right():
                 return root.get_left()
 
+            # node has a right child
             if root.get_val() == val and not root.get_left() \
                     and root.get_right():
                 return root.get_right()
 
+            # node has two children
             if root.get_val() == val and root.get_left() \
                     and root.get_right():
                 rightmost = root.get_left().get_rightmost()
                 root.set_val(rightmost)
                 root.set_left(__delete(root.get_left(), rightmost))
 
+            # recursively find the node to delete
             if val < root.get_val():
                 root.set_left(__delete(root.get_left(), val))
-
             if val > root.get_val():
                 root.set_right(__delete(root.get_right(), val))
 

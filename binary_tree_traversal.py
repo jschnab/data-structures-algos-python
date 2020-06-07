@@ -76,11 +76,12 @@ def postorder_recursive(node):
 
 
 if __name__ == "__main__":
-    root = Node(1)
-    root.left = Node(2)
+    root = Node("+")
+    root.left = Node("*")
     root.right = Node(3)
-    root.left.left = Node(4)
-    root.left.right = Node(5)
-    root.right.left = Node(6)
-    root.right.right = Node(7)
-    postorder_iterative(root)
+    root.left.left = Node("+")
+    root.left.right = Node(6)
+    root.left.left = Node("+")
+    root.left.left.left = Node(5)
+    root.left.left.right = Node(4)
+    preorder_iterative(root)

@@ -44,3 +44,15 @@ class HashMap:
     def __iter__(self):
         for i in self.hash_set:
             yield i.get_key()
+
+    def __str__(self):
+        s = "{"
+        items = []
+        for i in self.hash_set:
+            items.append(f"{repr(i.get_key())}: {repr(i.get_value())}")
+        s += ", ".join(items)
+        s += "}"
+        return s
+
+    def __repr__(self):
+        return str(self)

@@ -1,3 +1,5 @@
+import copy
+
 from hashset import HashSet
 
 
@@ -12,7 +14,7 @@ def read_matrix(file_name):
     with open(file_name) as f:
         for row in f:
             line = []
-            for cell in row.strip():
+            for cell in row.strip().replace(" ", ""):
                 if cell.lower() == "x":
                     line.append(HashSet(list(range(1, 10))))
                 else:
@@ -29,7 +31,7 @@ def print_matrix(matrix):
                 print("")
 
 
-def reduce(matrix):
+def reduce_(matrix):
     """
     At the moment, this can only solve very easy sudokus.
 
@@ -134,3 +136,70 @@ def sets_with_one_element(group):
     :return list[HashSet]: sets with a single element
     """
     return [i for i in group if len(i) == 1]
+
+
+def solution_viable(matrix):
+    """
+    Check that no sets are empty.
+
+    :param list[list[HashSet]] matrix: 2D matrix representing sudoku cells
+    :return bool: True if no sets are empty, else False
+    """
+    for i in range(9):
+        for j in range(9):
+            if len(matrix[i][j]) == 0:
+                return False
+    return True
+
+
+def solution_ok(matrix):
+    """
+    Check that:
+    - all cells of the matrix contain exactly 1 element
+    - the union of all cells in a group has 9 elements
+
+    :param list[list[HashSet]] matrix: 2D matrix representing sudoku cells
+    :return bool: True if the sudoku is solved, else False
+    """
+    for i in range(9):
+        for j in range(9):
+            if len(matrix[i][j]) != 1:
+                return False
+    groups = get_groups(matrix)
+    for group in groups:
+        union = HashSet()
+        for cell in group:
+            union = union.union(cell)
+        if len(union) != 9:
+            return False
+    return True
+
+
+def solve(matrix):
+    """
+    Solve the sudoku matrix.
+
+    :param list[list[HashSet]] matrix: 2D matrix representing sudoku cells
+    """
+    for _ in range(5):
+        reduce_(matrix)
+
+    if not solution_viable(matrix):
+        return None
+
+    if solution_ok(matrix):
+        return matrix
+
+    print("searching...")
+
+    for i in range(9):
+        for j in range(9):
+            if len(matrix[i][j]) > 1:
+                for k in matrix[i][j]:
+                    mcopy = copy.deepcopy(matrix)
+                    mcopy[i][j] = HashSet([k])
+                    result = solve(mcopy)
+                    if result is not None:
+                        return result
+
+    return None
