@@ -132,6 +132,25 @@ def get_directed_adjacent(vertex_id, edges):
     return adj_map.get(vertex_id, [])
 
 
+def get_undirected_adjacency_matrix(edges):
+    """
+    Return an undirected adjacency matrix from an iterable storing edges.
+    Values of the matrix represent the weight of the edges.
+
+    :param iterable[Edge] edges: set/list/etc of edges
+    :return dict[dict]: adjacency matrix
+    """
+    matrix = {}
+    for e in edges:
+        if not matrix.get(e.v1):
+            matrix[e.v1] = {}
+        matrix[e.v1][e.v2] = e.weight
+        if not matrix.get(e.v2):
+            matrix[e.v2] = {}
+        matrix[e.v2][e.v1] = e.weight
+    return matrix
+
+
 def dfs(edges, start, goal):
     """
     Finds a path within a graph using depth-first search.
@@ -206,7 +225,47 @@ def get_vertices_from_edges(edges):
     return list(vertices)
 
 
+def is_bipartite(edges):
+    """
+    Determines if a graph is bipartite from its edges.
+
+    :param iterable[Edge] edges: edges of the graph
+    :return bool: True if the graph is bipartite, else False
+    """
+    matrix = get_undirected_adjacency_matrix(edges)
+    vertices = get_vertices_from_edges(edges)
+    start = vertices[0]
+    col = {}  # colors
+    for v in vertices:
+        col[v] = -1
+    col[start] = 1
+    queue = []
+    queue.append(start)
+    while queue:
+        current = queue.pop()
+
+        # self-loop
+        if matrix.get(current, {}).get(current):
+            return False
+
+        if current in matrix:
+            for key in matrix[current].keys():
+
+                # if target vertex is not colored
+                if col[key] == -1:
+                    col[key] = 1 - col[current]
+                    queue.append(key)
+
+                # if vertices are the same color
+                elif col[current] == col[key]:
+                    return False
+    return True
+
+
 if __name__ == "__main__":
-    vertices, edges = read_yaml("graph2.yaml")
-    path = dfs(edges, 0, 4)
-    print_path(path)
+    vertices, edges = read_yaml("graph5.yaml")
+    print("graph 5 is bipartite: ", is_bipartite(edges))
+    vertices, edges = read_yaml("graph3.yaml")
+    print("graph 3 is bipartite: ", is_bipartite(edges))
+    vertices, edges = read_yaml("graph4.yaml")
+    print("graph 4 is bipartite: ", is_bipartite(edges))
