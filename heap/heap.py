@@ -280,4 +280,5 @@ def test10():
 
 
 if __name__ == "__main__":
-    test9()
+    h = Heap([57, 36, 101, 15, 71])
+    print(h.items)
