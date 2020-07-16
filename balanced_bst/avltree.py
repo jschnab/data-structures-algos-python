@@ -1,5 +1,12 @@
 """
-path stack: contains nodes along path to the new node's destination
+AVL tree: Adelson-Velskii and Landis invented balanced tree in 1962
+
+Stays balanced -> maintain O(logn) for insert, delete and lookup
+
+Can build tree in O(nlogn), traverse tree in O(n)
+
+path stack: contains nodes along path to the new node's destination (call stack
+if using recursion)
 
 pivot: when popping nodes from the path stack, first node with balance
        not equal to 0, i.e. closest ancestor to inserted node with balance
