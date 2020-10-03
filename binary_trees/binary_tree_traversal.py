@@ -31,9 +31,9 @@ def preorder_iterative(node):
     while stack:
         current = stack.pop()
         print(current.value)
-        if current.left:
-            stack.append(current.right)
         if current.right:
+            stack.append(current.right)
+        if current.left:
             stack.append(current.left)
 
 
