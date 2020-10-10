@@ -1,3 +1,6 @@
+from collections import deque
+
+
 class Node:
     def __init__(self, value=None, left=None, right=None):
         self.val = value
@@ -102,6 +105,19 @@ def morris(node):
     return result
 
 
+def bfs(node):
+    result = []
+    q = deque([node])
+    while q:
+        node = q.pop()
+        result.append(node.val)
+        if node.left:
+            q.appendleft(node.left)
+        if node.right:
+            q.appendleft(node.right)
+    return result
+
+
 def test1():
     root = Node("+")
     root.left = Node("*")
@@ -138,8 +154,14 @@ def test5():
     print("test 5 successful")
 
 
+def test6():
+    t = Node(1, Node(2, Node(4), Node(5)), Node(3, Node(6), Node(7)))
+    print(bfs(t))
+
+
 if __name__ == "__main__":
     test2()
     test3()
     test4()
     test5()
+    test6()
