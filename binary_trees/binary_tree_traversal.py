@@ -78,9 +78,11 @@ def postorder_recursive(node):
     print(node.val)
 
 
-def morris(node):
+def morris(node, order="inorder"):
     """
-    Perform inorder tree traversal using the Morris algorithm.
+    Perform inorder or preorder tree traversal using the Morris algorithm.
+    The type of tree traversal, 'inorder' or 'preorder', can be selected
+    using the 'order' argument.
 
     Time complexity: O(n)
     Space complexity: O(1) since we don't store a stack or queue of nodes
@@ -92,10 +94,13 @@ def morris(node):
             while predecessor.right and predecessor.right != node:
                 predecessor = predecessor.right
             if not predecessor.right:
+                if order == "preorder":
+                    result.append(node.val)
                 predecessor.right = node
                 node = node.left
             else:
-                result.append(node.val)
+                if order == "inorder":
+                    result.append(node.val)
                 predecessor.right = None
                 node = node.right
         else:
@@ -156,7 +161,31 @@ def test5():
 
 def test6():
     t = Node(1, Node(2, Node(4), Node(5)), Node(3, Node(6), Node(7)))
-    print(bfs(t))
+    assert bfs(t) == [1, 2, 3, 4, 5, 6, 7]
+    print("test 6 successful")
+
+
+def test7():
+    t = Node(4, Node(2, Node(1), Node(3)), Node(6, Node(5), Node(7)))
+    assert morris(t, "preorder") == [4, 2, 1, 3, 6, 5, 7]
+    print("test 7 successful")
+
+
+def test8():
+    t = Node(10, Node(5, Node(1), Node(7)), Node(11, Node(9)))
+    lst = []
+    stack = []
+    node = t
+    while stack or node:
+        if node:
+            stack.append(node)
+            node = node.left
+        else:
+            node = stack.pop()
+            lst.append(node.val)
+            node = node.right
+    assert lst == [1, 5, 7, 10, 9, 11]
+    print("test 8 successful")
 
 
 if __name__ == "__main__":
@@ -165,3 +194,5 @@ if __name__ == "__main__":
     test4()
     test5()
     test6()
+    test7()
+    test8()
